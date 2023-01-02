@@ -1,0 +1,36 @@
+const Serializer = require('./Serializer')
+
+class HabitLogSerializer extends Serializer
+{
+    static single(habitLog) {
+        return {
+            id: habitLog.id,
+            result: habitLog.result,
+            createdAt: habitLog.createdAt,
+            updatedAt: habitLog.updatedAt,
+        }
+    }
+
+    static pagination(obj) {
+        let res = {
+            data: [],
+            meta: {},
+        }
+        obj.docs.forEach(element => {
+            res.data.push(HabitLogSerializer.single(element))
+        })
+        res.meta = {
+            total: obj.totalDocs || 0,
+            perPage: obj.limit || 10,
+            totalPages: obj.totalPages || 0,
+            page: obj.page || 1,
+            prevPage: obj.prevPage || null,
+            nextPage: obj.nextPage || null,
+            pagingCounter: obj.pagingCounter || 0,
+        }
+
+        return res
+    }
+}
+
+module.exports = HabitLogSerializer
